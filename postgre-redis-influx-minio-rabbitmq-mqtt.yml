@@ -75,11 +75,30 @@ services:
     networks:
       - turing-network
 
+  mqtt:
+    image: eclipse-mosquitto:latest
+    container_name: mosquitto
+    restart: always
+    environment:
+      - MQTT_ADMIN_USER=${MQTT_ADMIN_USER}
+      - MQTT_ADMIN_PASSWORD=${MQTT_ADMIN_PASSWORD}
+    ports:
+      - "1883:1883"
+      - "9001:9001"
+    volumes:
+      - mosquitto_data:/mosquitto/data
+      - mosquitto_config:/mosquitto/config
+    networks:
+      - turing-network
+    command: "mosquitto -c /mosquitto/config/mosquitto.conf"
+
 volumes:
   postgres_data: {}
   minio_storage: {}
   redis_volume_data: {}
   influxdb_data: {}
+  mosquitto_data: {}
+  mosquitto_config: {}
 
 networks:
   turing-network:
